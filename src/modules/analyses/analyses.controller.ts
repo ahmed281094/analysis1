@@ -6,53 +6,7 @@ import * as chromeLauncher from "chrome-launcher";
 import lighthouse from "lighthouse";
 
 
-// export const createAnalyses = async (req: Request, res: Response) => {
-//   try {
-//     const { url } = req.body;
 
-//     if (!url) {
-//       return res.status(400).json({ error: "Website URL is required" });
-//     }
-
-//     const chrome = await chromeLauncher.launch({ chromeFlags: ["--headless"] });
-//     const options = {
-//       logLevel: "info" as const,
-//       output: "json" as const,
-//       port: chrome.port,
-//     };
-
-//     const runnerResult = await lighthouse(url, options);
-//     chrome.kill();
-
-//     if (!runnerResult || !runnerResult.report) {
-//       return res
-//         .status(500)
-//         .json({ error: "Lighthouse failed to generate report" });
-//     }
-
- 
-//     const reportStr = Array.isArray(runnerResult.report)
-//       ? runnerResult.report.join("")
-//       : runnerResult.report;
-
-//     const reportJson = JSON.parse(reportStr);
-
-
-
-
-//     res.status(200).json({
-//       message: "Website analysis completed successfully",
-//       performanceScore: reportJson.categories.performance.score,
-      
-//     });
-  
-   
-
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ error: "Failed to analyze website" });
-//   }
-// };
 
 
 export const createAnalyses = async (req: Request, res: Response) => {
@@ -147,3 +101,52 @@ export const getAnalysesByWebsite = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Failed to fetch analyses" });
   }
 };
+
+
+// export const createAnalyses = async (req: Request, res: Response) => {
+//   try {
+//     const { url } = req.body;
+
+//     if (!url) {
+//       return res.status(400).json({ error: "Website URL is required" });
+//     }
+
+//     const chrome = await chromeLauncher.launch({ chromeFlags: ["--headless"] });
+//     const options = {
+//       logLevel: "info" as const,
+//       output: "json" as const,
+//       port: chrome.port,
+//     };
+
+//     const runnerResult = await lighthouse(url, options);
+//     chrome.kill();
+
+//     if (!runnerResult || !runnerResult.report) {
+//       return res
+//         .status(500)
+//         .json({ error: "Lighthouse failed to generate report" });
+//     }
+
+ 
+//     const reportStr = Array.isArray(runnerResult.report)
+//       ? runnerResult.report.join("")
+//       : runnerResult.report;
+
+//     const reportJson = JSON.parse(reportStr);
+
+
+
+
+//     res.status(200).json({
+//       message: "Website analysis completed successfully",
+//       performanceScore: reportJson.categories.performance.score,
+      
+//     });
+  
+   
+
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ error: "Failed to analyze website" });
+//   }
+// };
