@@ -1,6 +1,36 @@
 
-       
-        
-    
-         
-    
+
+sservices:
+  app:
+    build: .
+    container_name: task1-app
+    ports:
+      - "4000:3000"
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@host.docker.internal:5432/analysis_app
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:15-alpine
+    container_name: task1-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: analysis_app
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    container_name: task1-redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  db_data:
