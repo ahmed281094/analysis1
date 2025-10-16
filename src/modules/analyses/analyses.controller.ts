@@ -4,9 +4,7 @@ import { analyses, websites } from "../../db/schema.js";
 import { eq } from "drizzle-orm";
 import * as chromeLauncher from "chrome-launcher";
 import lighthouse from "lighthouse";
-
-
-
+import { redis } from "../../redis.js";
 
 
 // export const createAnalyses = async (req: Request, res: Response) => {
@@ -175,14 +173,22 @@ import lighthouse from "lighthouse";
 //   }
 // };
 
-
-
 export const createAnalyses = async (req: Request, res: Response) => {
   try {
     const { url } = req.body;
     if (!url) return res.status(400).json({ error: "Website URL is required" });
 
-    const existing = await db.select().from(websites).where(eq(websites.url, url)).limit(1);
+    const cacheKey = `analysis:score:${url}`;
+    const cachedScore = await redis.get(cacheKey);
+    if (cachedScore) {
+      console.log("Serving performance score from Redis cache...");
+      return res.status(200).json({
+        message: "Website analysis (from cache)",
+        performanceScore: Number(cachedScore),
+        fromCache: true,
+      });
+    }
+   const existing = await db.select().from(websites).where(eq(websites.url, url)).limit(1);
 
     let websiteId: number;
     if (existing.length > 0 && existing[0]?.id) {
@@ -245,14 +251,19 @@ export const createAnalyses = async (req: Request, res: Response) => {
       report: JSON.stringify(reportJson),
     });
 
+
+   if (performanceScore !== null) {
+      await redis.set(cacheKey, performanceScore.toString(), "EX", 3600);
+    } 
+
     return res.status(200).json({
       message: "Website analysis completed successfully",
       performanceScore,
       websiteId,
+      fromCache: false,
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to analyze website" });
+    res.status(500).json({ error: "Failed to analyze website",err });
   }
 };
 
@@ -262,6 +273,19 @@ export const getAnalysesByWebsite = async (req: Request, res: Response) => {
     if (!websiteIdStr) {
       return res.status(400).json({ error: "Website ID is required" });
     }
+const cacheKey = `analyses:${websiteIdStr}`;
+     const cached = await redis.get(cacheKey);
+
+      
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      return res.status(200).json({
+        fromCache: true,
+        result: parsed,
+      });
+    }
+
+
     const websiteId = parseInt(websiteIdStr, 10);
 
     const result = await db
@@ -269,7 +293,13 @@ export const getAnalysesByWebsite = async (req: Request, res: Response) => {
       .from(analyses)
       .where(eq(analyses.websiteId, websiteId));
 
-    res.json(result);
+  await redis.set(cacheKey, JSON.stringify(result), "EX" ,60 );
+
+   return res.json({
+    fromCache: false,
+    result,
+
+   });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to fetch analyses" });
