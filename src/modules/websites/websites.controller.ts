@@ -69,8 +69,6 @@ export const getWebsites = async (req: Request, res: Response) => {
 
 
 
-
-
 export const getWebsiteById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -98,7 +96,6 @@ export const getWebsiteById = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Website not found" });
     }
 
- 
     await redis.set(cacheKey, JSON.stringify(website), "EX" , 60 );
   
     return res.status(200).json({
