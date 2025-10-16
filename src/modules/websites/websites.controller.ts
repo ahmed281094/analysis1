@@ -1,13 +1,8 @@
-
-
-
 import { eq } from "drizzle-orm";
 import { db } from "../../db/DBconnection.js";
 import { websites } from "../../db/schema.js";
 
 import type{ Request, Response } from "express";
-
-
 
 export const createWebsite = async (req: Request, res: Response) => {
   try {
@@ -28,9 +23,6 @@ export const createWebsite = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Failed to create website" });
   }
 };
-
-
-
 
 
 export const getWebsites = async (req: Request, res: Response) => {

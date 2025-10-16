@@ -1,36 +1,48 @@
-
-
-sservices:
-  app:
-    build: .
-    container_name: task1-app
-    ports:
-      - "4000:3000"
-    environment:
-      DATABASE_URL: postgres://postgres:postgres@host.docker.internal:5432/analysis_app
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-    depends_on:
-      - db
-      - redis
-
-  db:
-    image: postgres:15-alpine
-    container_name: task1-db
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: task1-postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: analysis_app
-    volumes:
-      - db_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - tasknet
 
   redis:
     image: redis:7-alpine
     container_name: task1-redis
     ports:
       - "6379:6379"
+    networks:
+      - tasknet
+
+  app:
+    build: .
+    container_name: task1-app
+    command: npm run dev
+    environment:
+      # DATABASE_URL: postgres://postgres:postgres@localhost:5432/analysis_app
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/analysis_app
+      CHROME_PATH: /usr/bin/chromium
+      REDIS_URL: redis://redis:6379
+    ports:
+      - "4000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - tasknet
+
+networks:
+  tasknet:
 
 volumes:
-  db_data:
+  pgdata:
