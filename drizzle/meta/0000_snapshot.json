@@ -1,119 +1,115 @@
 {
-  "id": "8544e782-7d9c-418c-97c3-25f41155aebd",
-  "prevId": "00000000-0000-0000-0000-000000000000",
-  "version": "7",
-  "dialect": "postgresql",
-  "tables": {
-    "public.analyses": {
-      "name": "analyses",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "website_id": {
-          "name": "website_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "type": {
-          "name": "type",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "report": {
-          "name": "report",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "analyses_website_id_websites_id_fk": {
-          "name": "analyses_website_id_websites_id_fk",
-          "tableFrom": "analyses",
-          "tableTo": "websites",
-          "columnsFrom": [
-            "website_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.websites": {
-      "name": "websites",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "identity": {
-            "type": "always",
-            "name": "websites_id_seq",
-            "schema": "public",
-            "increment": "1",
-            "startWith": "1",
-            "minValue": "1",
-            "maxValue": "2147483647",
-            "cache": "1",
-            "cycle": false
-          }
-        },
-        "url": {
-          "name": "url",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "status": {
-          "name": "status",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'active'"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    }
-  },
-  "enums": {},
-  "schemas": {},
-  "sequences": {},
-  "roles": {},
-  "policies": {},
-  "views": {},
-  "_meta": {
-    "columns": {},
-    "schemas": {},
-    "tables": {}
-  }
+	"id": "8544e782-7d9c-418c-97c3-25f41155aebd",
+	"prevId": "00000000-0000-0000-0000-000000000000",
+	"version": "7",
+	"dialect": "postgresql",
+	"tables": {
+		"public.analyses": {
+			"name": "analyses",
+			"schema": "",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "integer",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"website_id": {
+					"name": "website_id",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"type": {
+					"name": "type",
+					"type": "varchar",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"report": {
+					"name": "report",
+					"type": "varchar",
+					"primaryKey": false,
+					"notNull": true
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"analyses_website_id_websites_id_fk": {
+					"name": "analyses_website_id_websites_id_fk",
+					"tableFrom": "analyses",
+					"tableTo": "websites",
+					"columnsFrom": ["website_id"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"public.websites": {
+			"name": "websites",
+			"schema": "",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "integer",
+					"primaryKey": true,
+					"notNull": true,
+					"identity": {
+						"type": "always",
+						"name": "websites_id_seq",
+						"schema": "public",
+						"increment": "1",
+						"startWith": "1",
+						"minValue": "1",
+						"maxValue": "2147483647",
+						"cache": "1",
+						"cycle": false
+					}
+				},
+				"url": {
+					"name": "url",
+					"type": "varchar",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"name": {
+					"name": "name",
+					"type": "varchar",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"status": {
+					"name": "status",
+					"type": "varchar",
+					"primaryKey": false,
+					"notNull": false,
+					"default": "'active'"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		}
+	},
+	"enums": {},
+	"schemas": {},
+	"sequences": {},
+	"roles": {},
+	"policies": {},
+	"views": {},
+	"_meta": {
+		"columns": {},
+		"schemas": {},
+		"tables": {}
+	}
 }
