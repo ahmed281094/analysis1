@@ -1,5 +1,6 @@
 import "dotenv/config";
 import express from "express";
+import logger from "./logger";
 import analysesRouter from "./modules/analyses/analyses.routes";
 import websitesRouter from "./modules/websites/websites.routes";
 
@@ -10,5 +11,5 @@ app.use("/websites", websitesRouter);
 app.use("/analyses", analysesRouter);
 const PORT = Number(process.env.PORT ?? 4000);
 app.listen(PORT, () => {
-	console.log(`Server running on http://localhost:${PORT}`);
+	logger.info(`Server running on http://localhost:${PORT}`);
 });

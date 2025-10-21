@@ -2,7 +2,10 @@ import { eq } from "drizzle-orm";
 import type { Request, Response } from "express";
 import { db } from "../../db/DBconnection";
 import { websites } from "../../db/schema";
+import logger from "../../logger";
 import { redis } from "../../redis";
+
+const log = logger.child("websites.controller");
 
 export const createWebsite = async (req: Request, res: Response) => {
 	try {
@@ -33,7 +36,7 @@ export const getWebsites = async (req: Request, res: Response) => {
 
 		const cached = await redis.get(cacheKey);
 		if (cached) {
-			console.log("Serving from Redis cache...");
+			log.info("Serving from Redis cache...");
 			const parsed = JSON.parse(cached);
 			return res.status(200).json({
 				fromCache: true,
@@ -56,6 +59,7 @@ export const getWebsites = async (req: Request, res: Response) => {
 			...response,
 		});
 	} catch (err) {
+		log.error("Failed to fetch websites:", err);
 		return res.status(500).json({ error: "failed to fetch websites", err });
 	}
 };
@@ -71,7 +75,7 @@ export const getWebsiteById = async (req: Request, res: Response) => {
 		const cacheKey = `website:${websiteId}`;
 		const cached = await redis.get(cacheKey);
 		if (cached) {
-			console.log(`Serving website ${websiteId} from Redis cache...`);
+			log.info(`Serving website ${websiteId} from Redis cache...`);
 			return res.status(200).json({
 				fromCache: true,
 				data: JSON.parse(cached),
@@ -94,6 +98,7 @@ export const getWebsiteById = async (req: Request, res: Response) => {
 			data: website,
 		});
 	} catch (err) {
+		log.error("Failed to fetch website:", err);
 		return res.status(500).json({ error: "Failed to fetch website", err });
 	}
 };
